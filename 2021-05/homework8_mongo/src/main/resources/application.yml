@@ -4,7 +4,7 @@ spring:
     mongodb:
       #authentication-database: admin
       database: books
-      port: 27017
+      port: 0
       host: localhost
 mongock:
   runner-type: "ApplicationRunner" # default
