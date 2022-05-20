@@ -1,9 +1,13 @@
 DELETE
-FROM TRAINING_RESULTS;
+FROM RESULTS;
 DELETE
 FROM TRAININGS;
 DELETE
+FROM SCHEDULE;
+DELETE
 FROM WORDS;
+DELETE
+FROM SETTINGS;
 DELETE
 FROM DICTIONARIES;
 DELETE
@@ -43,6 +47,14 @@ values ('tenacious', 'упорный, упрямый', 'merriam-webster',
         'Put the patient on a treadmill.',
         '2021-12-09', null, 0, 1, 1);
 
+insert into SCHEDULE (WORD_ID, NEXT_TRAIN_DATE, LAST_TRAIN_DATE, TOTAL_NUMBER, STAGE, STATUS, LEARNT_DATE, DICT_ID)
+values (1, '2021-12-09', null, 0, 0, 0, null, 1),
+       (2, '2021-12-09', null, 0, 0, 0, null, 1);
+
+insert into SETTINGS (USER_ID, NUMBER_NEW_WORDS, NUMBER_REPEAT_WORDS)
+values (1, 10, 10),
+       (3, 10, 10);
+
 INSERT INTO acl_sid (id, principal, sid) VALUES
 (1, 1, 'lenu'),
 (2, 1, 'admin'),
@@ -52,7 +64,7 @@ INSERT INTO acl_sid (id, principal, sid) VALUES
 
 
 INSERT INTO acl_class (id, class) VALUES
-(1, 'com.example.homework13_acl.model.Dictionary');
+(1, 'com.example.ankitrainingsystem.model.Dictionary');
 
 INSERT INTO acl_object_identity (id, object_id_class, object_id_identity, parent_object, owner_sid, entries_inheriting) VALUES
 (1, 1, 1, NULL, 1, 0),

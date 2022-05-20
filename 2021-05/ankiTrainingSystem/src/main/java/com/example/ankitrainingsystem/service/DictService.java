@@ -15,9 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
-
-
 @Service
 public class DictService {
     @Autowired
@@ -31,18 +28,18 @@ public class DictService {
     }
 
     public void add(Dictionary dictionary) {
-        repository.save( dictionary );
+        repository.save(dictionary);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final Sid owner = new PrincipalSid( authentication );
-        ObjectIdentity oid = new ObjectIdentityImpl( dictionary.getClass(), dictionary.getId() );
+        final Sid owner = new PrincipalSid(authentication);
+        ObjectIdentity oid = new ObjectIdentityImpl(dictionary.getClass(), dictionary.getId());
 
         final Sid admin = new GrantedAuthoritySid("ROLE_USER");
 
-        MutableAcl acl = mutableAclService.createAcl( oid );
-        acl.setOwner( owner );
-        acl.insertAce( acl.getEntries().size(), BasePermission.ADMINISTRATION, admin, true );
+        MutableAcl acl = mutableAclService.createAcl(oid);
+        acl.setOwner(owner);
+        acl.insertAce(acl.getEntries().size(), BasePermission.ADMINISTRATION, admin, true);
 
-        mutableAclService.updateAcl( acl );
+        mutableAclService.updateAcl(acl);
 
 
     }

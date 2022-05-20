@@ -35,7 +35,9 @@
         <tbody>
         <tr th:each="dict : ${dicts}">
             <td th:text="${dict.id}">1</td>
-            <td th:text="${dict.name}">animals</td>
+            <td>
+                <a th:text="${dict.name}" th:href="@{/words/all(dictId=${dict.id})}" href="dict.html">animals</a>
+            </td>
             <td th:text="${dict.creationDate}">01.01.2022</td>
 <!--            <td th:text="${dict.owner}">lenu</td>-->
             <td th:text="${dict.description}">Words about animals</td>

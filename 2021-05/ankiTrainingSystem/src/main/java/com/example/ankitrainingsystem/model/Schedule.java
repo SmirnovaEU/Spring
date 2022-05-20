@@ -9,14 +9,14 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-@Entity
+@Entity(name = "schedule")
 @Table(name = "schedule")
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(targetEntity = Word.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Word.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "word_id", nullable = false)
     private Word word;
 
@@ -29,7 +29,7 @@ public class Schedule {
     @Column(name = "total_number")
     private int totalTrainNumber;
 
-    @Column(name = "stage, nullable = false")
+    @Column(name = "stage", nullable = false)
     private LearningStage stage;
 
     @Column(name = "status")

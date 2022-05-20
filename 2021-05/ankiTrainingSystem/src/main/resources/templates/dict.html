@@ -13,13 +13,19 @@
 <body>
 
 <div class="btn-group" role="group">
-    <a th:href="@{/words/all(lang=en_EN)}" class="btn btn-primary" type="radio" href="dict.html">en</a>
-    <a th:href="@{/words/all(lang=ru_RU)}" class="btn btn-danger" type="radio" href="dict.html">ru</a>
+    <a th:href="@{/words/all(dictId=${dictionary.id}, lang=en_EN)}" class="btn btn-primary" type="radio" href="dict.html">en</a>
+    <a th:href="@{/words/all(dictId=${dictionary.id}, lang=ru_RU)}" class="btn btn-danger" type="radio" href="dict.html">ru</a>
 </div>
-<br/><br/>
+
 <div class="container">
+    <div class="btn-toolbar" role="toolbar" style="align-self: center">
+        <a th:href="@{/trainings/new(dictId=${dictionary.id})}" class="btn btn-success mr-4" th:text="#{button.learn}">Learn new words</a>
+        <a th:href="@{/trainings/repeat(dictId=${dictionary.id})}" class="btn btn-info" th:text="#{button.repeat}">Repeat words</a>
+    </div>
+    <br/><br/>
     <h1 th:text="${dictionary.name}">Dictionary:</h1>
     <a th:href="@{/words/addWord(id=${dictionary.id})}" class="btn btn-primary" href="add.html" th:text="#{title.add}">Add word</a>
+    <a th:href="@{/words/schedule(dictId=${dictionary.id})}" class="btn btn-danger" href="schedule.html" th:text="#{title.schedule}">Schedule</a>
     <br/><br/>
 
     <table class="table table-bordered table-striped">
@@ -49,7 +55,7 @@
                 <a th:href="@{/words/edit(id=${word.id})}" class="btn btn-info" href="edit.html" th:text="#{command.edit}">Edit</a>
             </td>
             <td>
-                <a th:href="@{/words/delete(id=${word.id})}" class="btn btn-danger ml-2"
+                <a th:href="@{/words/delete(id=${word.id}, dictId=${dictionary.id})}" class="btn btn-danger ml-2"
                    th:text="#{command.delete}">Delete</a>
             </td>
         </tr>

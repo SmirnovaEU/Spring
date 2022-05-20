@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -24,13 +25,18 @@ public class Training {
     @Column(name = "repeat", nullable = false)
     private boolean isRepeat;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "word_id", nullable = false)
+    @ManyToMany(targetEntity = Word.class, fetch = FetchType.LAZY)
+    @JoinTable(name = "trainings_words", joinColumns = @JoinColumn(name = "training_id"),
+            inverseJoinColumns = @JoinColumn(name = "word_id"))
     private List<Word> words;
 
-    public Training(Dictionary dictionary, boolean isRepeat, List<Word> words) {
+    @Column(name = "train_date", nullable = false)
+    private LocalDate trainingDate;
+
+    public Training(Dictionary dictionary, boolean isRepeat, List<Word> words, LocalDate trainingDate) {
         this.dictionary = dictionary;
         this.isRepeat = isRepeat;
         this.words = words;
+        this.trainingDate = trainingDate;
     }
 }

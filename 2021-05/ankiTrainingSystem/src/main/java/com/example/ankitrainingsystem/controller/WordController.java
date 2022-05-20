@@ -3,13 +3,18 @@ package com.example.ankitrainingsystem.controller;
 import com.example.ankitrainingsystem.dto.NewWordDto;
 import com.example.ankitrainingsystem.model.Dictionary;
 import com.example.ankitrainingsystem.model.Schedule;
+import com.example.ankitrainingsystem.model.User;
 import com.example.ankitrainingsystem.model.Word;
 import com.example.ankitrainingsystem.repository.DictionaryRepository;
 import com.example.ankitrainingsystem.repository.ScheduleRepository;
 import com.example.ankitrainingsystem.repository.WordRepository;
 
+import com.example.ankitrainingsystem.security.UserSecurity;
 import com.example.ankitrainingsystem.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -39,8 +45,8 @@ public class WordController {
     }
 
     @GetMapping("/words/all")
-    public String dictionaryPage(Model model) {
-        Dictionary dict = dictRepository.findById(1L).orElseThrow(NotFoundException::new);
+    public String dictionaryPage(@RequestParam("dictId") long dictId, Model model) {
+        Dictionary dict = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
         List<Word> dictWords = repository.findAllByDictionary(dict);
         model.addAttribute("dictionary", dict);
         model.addAttribute("words", dictWords);
@@ -66,34 +72,35 @@ public class WordController {
     }
 
     @PostMapping("/words/edit")
-    public String editWord(
-            Word wordForm,
-            Model model
-    ) {
+    public String editWord(Word wordForm, Model model, RedirectAttributes redirectAttributes) {
         Word saved = service.editWord(wordForm);
         model.addAttribute(saved);
+        redirectAttributes.addAttribute("dictId", saved.getDictionary().getId());
         return "redirect:/words/all";
     }
 
     @PostMapping("/words/addWord")
-    public String createWord(@RequestParam("dictId") long dictId, NewWordDto wordForm, Model model) {
+    public String createWord(@RequestParam("dictId") long dictId, NewWordDto wordForm, Model model, RedirectAttributes redirectAttributes) {
         service.createWord(wordForm, dictId);
+        redirectAttributes.addAttribute("dictId", dictId);
         return "redirect:/words/all";
     }
 
     @GetMapping("/words/delete")
-    public String deleteWord(@RequestParam Long id) {
+    public String deleteWord(@RequestParam Long id, @RequestParam long dictId, RedirectAttributes redirectAttributes) {
         repository.deleteById(id);
+        //Word word = repository.findById(id).orElseThrow();
+        redirectAttributes.addAttribute("dictId", dictId);
         return "redirect:/words/all";
     }
 
     @GetMapping("/words/schedule")
-    public String schedulePage(Model model) {
-        //TODO: заменить на текущий словарь, id словаря должен быть в модели
-        Dictionary dict = dictRepository.findById(1L).orElseThrow(NotFoundException::new);
+    public String schedulePage(@RequestParam("dictId") long dictId, Model model, RedirectAttributes redirectAttributes) {
+        Dictionary dict = dictRepository.findById(dictId).orElseThrow(NotFoundException::new);
         List<Schedule> dictSchedule = scheduleRepository.findAllByDictionary(dict);
         model.addAttribute("dictionary", dict);
         model.addAttribute("schedules", dictSchedule);
+        redirectAttributes.addAttribute("dictId", dictId);
         return "schedule";
     }
 

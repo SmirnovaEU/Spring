@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS words CASCADE;
 DROP TABLE IF EXISTS dictionaries;
-DROP TABLE IF EXISTS trainings_results;
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS results;
 DROP TABLE IF EXISTS trainings;
 DROP TABLE IF EXISTS users;
 
@@ -34,7 +35,7 @@ CREATE TABLE users
 
 CREATE TABLE dictionaries
 (
-    id          BIGINT NOT NULL,
+    id          BIGINT       NOT NULL,
     name        VARCHAR(255) NOT NULL,
     create_date DATE         NOT NULL,
     description VARCHAR(2048),
@@ -59,62 +60,96 @@ CREATE TABLE words
 
 create table trainings
 (
-    id         bigint,
+    id         BIGSERIAL,
     train_date datetime,
     user_id    BIGINT REFERENCES users,
+    dict_id    BIGINT REFERENCES dictionaries,
+    repeat     BOOLEAN,
     CONSTRAINT trainings_pkey PRIMARY KEY (id)
 );
 
-create table training_results
+create table trainings_words
 (
-    id          bigint,
+    id          BIGSERIAL,
+    word_id     bigint references words (id) on delete cascade,
+    training_id bigint references trainings (id),
+    CONSTRAINT trainings_words_pkey PRIMARY KEY (id)
+);
+
+create table results
+(
+    id          BIGSERIAL,
     word_id     bigint references words (id) on delete cascade,
     training_id bigint references trainings (id),
     success     boolean,
-    CONSTRAINT results_pkey PRIMARY KEY (id)
+    CONSTRAINT results_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_result_key UNIQUE (word_id, training_id)
+);
+
+create table schedule
+(
+    id          BIGSERIAL,
+    word_id     bigint references words (id) on delete cascade,
+    next_train_date DATE,
+    last_train_date DATE,
+    total_number    bigint,
+    stage           VARCHAR(255),
+    status          VARCHAR(255),
+    learnt_date     DATE,
+    dict_id         bigint,
+    CONSTRAINT schedule_pkey PRIMARY KEY (id)
+);
+
+create table settings
+(
+    id          BIGSERIAL,
+    user_id     bigint references users (id) on delete cascade,
+    number_new_words        bigint,
+    number_repeat_words     bigint,
+    CONSTRAINT settings_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE acl_sid
 (
-    id        bigint  NOT NULL AUTO_INCREMENT,
-    principal integer  NOT NULL,
+    id        bigint       NOT NULL AUTO_INCREMENT,
+    principal integer      NOT NULL,
     sid       varchar(100) NOT NULL,
     CONSTRAINT sid_pkey PRIMARY KEY (id),
-    CONSTRAINT unique_uk_1 UNIQUE (sid,principal)
+    CONSTRAINT unique_uk_1 UNIQUE (sid, principal)
 );
 
 CREATE TABLE acl_class
 (
-    id    bigint   NOT NULL AUTO_INCREMENT,
+    id    bigint       NOT NULL AUTO_INCREMENT,
     class varchar(255) NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT unique_uk_2 UNIQUE(class)
+    CONSTRAINT unique_uk_2 UNIQUE (class)
 );
 
 CREATE TABLE IF NOT EXISTS acl_entry
 (
-    id                  bigint NOT NULL AUTO_INCREMENT,
-    acl_object_identity bigint NOT NULL,
-    ace_order           integer    NOT NULL,
-    sid                 bigint NOT NULL,
-    mask                integer    NOT NULL,
+    id                  bigint  NOT NULL AUTO_INCREMENT,
+    acl_object_identity bigint  NOT NULL,
+    ace_order           integer NOT NULL,
+    sid                 bigint  NOT NULL,
+    mask                integer NOT NULL,
     granting            tinyint NOT NULL,
     audit_success       tinyint NOT NULL,
     audit_failure       tinyint NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT unique_uk_4 UNIQUE (acl_object_identity,ace_order)
+    CONSTRAINT unique_uk_4 UNIQUE (acl_object_identity, ace_order)
 );
 
 CREATE TABLE IF NOT EXISTS acl_object_identity
 (
-    id                 bigint NOT NULL AUTO_INCREMENT,
-    object_id_class    bigint NOT NULL,
-    object_id_identity bigint NOT NULL,
+    id                 bigint  NOT NULL AUTO_INCREMENT,
+    object_id_class    bigint  NOT NULL,
+    object_id_identity bigint  NOT NULL,
     parent_object      bigint DEFAULT NULL,
     owner_sid          bigint DEFAULT NULL,
     entries_inheriting tinyint NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT unique_uk_3 UNIQUE (object_id_class,object_id_identity)
+    CONSTRAINT unique_uk_3 UNIQUE (object_id_class, object_id_identity)
 );
 
 ALTER TABLE acl_entry

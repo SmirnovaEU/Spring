@@ -3,9 +3,9 @@ package com.example.ankitrainingsystem.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
 import com.example.ankitrainingsystem.model.Dictionary;
-import com.example.ankitrainingsystem.model.WordStatus;
+
+import java.time.LocalDate;
 
 
 @Data
@@ -15,7 +15,7 @@ public class NewWordDto {
     private String translation;
     private String context;
     private String example;
-    private LocalDate addedDate;
-    private WordStatus state;
+//    private LocalDate addedDate;
+//    private WordStatus state;
     private Dictionary dictionary;
 }

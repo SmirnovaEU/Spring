@@ -8,3 +8,11 @@ spring:
       ddl-auto: none
       use-new-id-generator-mappings: false
     show-sql: true
+
+
+
+info:
+  app:
+    version: @project.version@
+    author: lenu
+    description: This is a multiuser anki training system

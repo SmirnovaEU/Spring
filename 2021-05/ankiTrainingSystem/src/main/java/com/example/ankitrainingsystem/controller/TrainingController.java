@@ -1,44 +1,61 @@
 package com.example.ankitrainingsystem.controller;
 
-import com.example.ankitrainingsystem.model.*;
+import com.example.ankitrainingsystem.model.Dictionary;
+import com.example.ankitrainingsystem.model.Result;
+import com.example.ankitrainingsystem.model.Training;
+import com.example.ankitrainingsystem.model.Word;
 import com.example.ankitrainingsystem.repository.*;
-import com.example.ankitrainingsystem.service.WordService;
+import com.example.ankitrainingsystem.service.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
 public class TrainingController {
+    private final TrainService service;
     private final DictionaryRepository dictRepository;
-    private final WordRepository wordRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final SettingsRepository setRepository;
-    private final TrainingRepository trainingRepository;
-    private final WordService wordService;
-
 
     @Autowired
-    public TrainingController(DictionaryRepository dictRepository, WordRepository wordRepository, ScheduleRepository scheduleRepository, SettingsRepository setRepository, TrainingRepository trainingRepository, WordService wordService) {
+    public TrainingController(TrainService service, DictionaryRepository dictRepository) {
+        this.service = service;
         this.dictRepository = dictRepository;
-        this.wordRepository = wordRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.setRepository = setRepository;
-        this.trainingRepository = trainingRepository;
-        this.wordService = wordService;
+    }
+
+    @GetMapping("/trainings/new")
+    public String getNewTraining(@RequestParam("dictId") long dictId, Model model) {
+
+        Training training = service.newTraining(dictId);
+        Dictionary dict = dictRepository.findById(dictId).orElseThrow();
+        model.addAttribute("training", training);
+        model.addAttribute("dictionary", dict);
+        if (training.getWords().isEmpty()) return "nowords";
+        return "training";
+    }
+
+    @GetMapping("/trainings/repeat")
+    public String getRepeatTraining(@RequestParam("dictId") long dictId, Model model) {
+
+        Training training = service.repeatTraining(dictId);
+        Dictionary dict = dictRepository.findById(dictId).orElseThrow();
+        model.addAttribute("training", training);
+        model.addAttribute("dictionary", dict);
+        if (training.getWords().isEmpty()) return "nowords";
+        return "training";
     }
 
     @PostMapping("/trainings")
-    public void createTraining(User user) {
-        //TODO: перенести в сервис после исправления получения текущего словаря
-        Dictionary dict = dictRepository.findById(1L).orElseThrow(NotFoundException::new);
-        int newWordsQuantity = setRepository.findFirstByUSer(user).getNewWordsInTrain();
-
-        List<Word> wordList = wordRepository.findWordsForNewTraining(dict, WordStatus.NEW, newWordsQuantity);
-        Training training = new Training(dict, false, wordList);
-        trainingRepository.save(training);
-        wordService.trainWords(wordList);
+    public String createRepeatTraining(long id, Model model) {
+        List<Result> results = service.doTraining(id);
+        Training training = results.get(0).getTraining();
+        model.addAttribute("dictionary", training.getDictionary());
+        model.addAttribute("results", results);
+        return "result";
     }
 
 
