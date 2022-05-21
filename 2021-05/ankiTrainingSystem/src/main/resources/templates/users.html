@@ -12,23 +12,28 @@
 </head>
 <body>
 
-<div class="btn-group" role="group">
-    <a th:href="@{/users/all(lang=en_EN)}" class="btn btn-primary" type="radio" href="users.html">en</a>
-    <a th:href="@{/users/all(lang=ru_RU)}" class="btn btn-danger" type="radio" href="users.html">ru</a>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="btn-group" role="group">
+        <a th:href="@{/users/all(lang=en_EN)}" class="btn btn-info" type="radio" href="users.html">en</a>
+        <a th:href="@{/users/all(lang=ru_RU)}" class="btn btn-danger" type="radio" href="users.html">ru</a>
+    </div>
+</nav>
+
 <br/><br/>
 <div class="container">
     <h1 th:text="#{title.users}">Users:</h1>
-    <a th:href="@{/users/addUser}" class="btn btn-primary" href="addUser.html" th:text="#{title.addUser}">Add user</a>
+    <a th:href="@{/users/addUser}" class="btn btn-success" href="addUser.html" th:text="#{title.addUser}">Add user</a>
     <br/><br/>
 
     <table class="table table-bordered table-striped">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th th:text="#{field.name(':')}">LOGIN</th>
             <th th:text="#{field.password(':')}">PASSWORD</th>
             <th th:text="#{field.role(':')}">ROLE</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -38,10 +43,11 @@
             <td th:text="${user.password}">password</td>
             <td th:text="${user.role}">user</td>
             <td>
-                <a th:href="@{/users/edit(id=${user.id})}" class="btn btn-info" href="editUser.html" th:text="#{command.edit}">Edit</a>
+                <a th:href="@{/users/edit(id=${user.id})}" class="btn btn-outline-success" href="editUser.html"
+                   th:text="#{command.edit}">Edit</a>
             </td>
             <td>
-                <a th:href="@{/users/delete(id=${user.id})}" class="btn btn-danger ml-2"
+                <a th:href="@{/users/delete(id=${user.id})}" class="btn btn-outline-danger ml-2"
                    th:text="#{command.delete}">Delete</a>
             </td>
         </tr>

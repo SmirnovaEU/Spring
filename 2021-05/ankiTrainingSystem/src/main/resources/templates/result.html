@@ -20,16 +20,16 @@
     <h3 th:text="#{title.results}">Results</h3>
     <table class="table table-bordered table-striped">
 
-        <thead>
+        <thead class="thead-dark">
         <tr>
-            <th>ID</th>
+<!--            <th>ID</th>-->
             <th th:text="#{field.word('')}">WORD</th>
             <th th:text="#{field.success('')}">SUCCESS</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="result : ${results}">
-            <td th:text="${result.id}">1</td>
+<!--            <td th:text="${result.id}">1</td>-->
             <td th:text="${result.word.name}">invariably</td>
             <td th:text="${result.success}">0</td>
 
@@ -38,7 +38,7 @@
     </table>
 
     <div class="btn-toolbar" role="toolbar">
-        <a th:href="@{/words/all(dictId=${dictionary.id})}" class="btn btn-primary mr-3"
+        <a th:href="@{/words/all(dictId=${dictionary.id})}" class="btn btn-info mr-3"
            th:text="#{title.dictionary}">To dictionary</a>
         <a th:href="@{/words/schedule(dictId=${dictionary.id})}" class="btn btn-danger" th:text="#{title.schedule}">Schedule</a>
     </div>

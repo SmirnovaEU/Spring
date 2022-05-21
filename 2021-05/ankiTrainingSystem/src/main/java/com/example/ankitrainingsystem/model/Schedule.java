@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Table(name = "schedule")
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToOne(targetEntity = Word.class, cascade = CascadeType.PERSIST)

@@ -1,9 +1,11 @@
 DROP TABLE IF EXISTS words CASCADE;
-DROP TABLE IF EXISTS dictionaries;
 DROP TABLE IF EXISTS schedule;
 DROP TABLE IF EXISTS results;
+DROP TABLE IF EXISTS trainings_words;
 DROP TABLE IF EXISTS trainings;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS dictionaries;
+DROP TABLE IF EXISTS users CASCADE ;
+DROP TABLE IF EXISTS settings;
 
 DROP TABLE IF EXISTS acl_entry;
 DROP TABLE IF EXISTS acl_object_identity;
@@ -35,7 +37,7 @@ CREATE TABLE users
 
 CREATE TABLE dictionaries
 (
-    id          BIGINT       NOT NULL,
+    id          BIGSERIAL       NOT NULL,
     name        VARCHAR(255) NOT NULL,
     create_date DATE         NOT NULL,
     description VARCHAR(2048),
@@ -61,7 +63,7 @@ CREATE TABLE words
 create table trainings
 (
     id         BIGSERIAL,
-    train_date datetime,
+    train_date date,
     user_id    BIGINT REFERENCES users,
     dict_id    BIGINT REFERENCES dictionaries,
     repeat     BOOLEAN,
@@ -94,9 +96,9 @@ create table schedule
     last_train_date DATE,
     total_number    bigint,
     stage           VARCHAR(255),
-    status          VARCHAR(255),
+    status          int,
     learnt_date     DATE,
-    dict_id         bigint,
+    dict_id         bigint references dictionaries (id) on delete cascade,
     CONSTRAINT schedule_pkey PRIMARY KEY (id)
 );
 
@@ -111,7 +113,7 @@ create table settings
 
 CREATE TABLE acl_sid
 (
-    id        bigint       NOT NULL AUTO_INCREMENT,
+    id        SERIAL,
     principal integer      NOT NULL,
     sid       varchar(100) NOT NULL,
     CONSTRAINT sid_pkey PRIMARY KEY (id),
@@ -120,7 +122,7 @@ CREATE TABLE acl_sid
 
 CREATE TABLE acl_class
 (
-    id    bigint       NOT NULL AUTO_INCREMENT,
+    id    SERIAL,
     class varchar(255) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT unique_uk_2 UNIQUE (class)
@@ -128,26 +130,26 @@ CREATE TABLE acl_class
 
 CREATE TABLE IF NOT EXISTS acl_entry
 (
-    id                  bigint  NOT NULL AUTO_INCREMENT,
+    id                  SERIAL,
     acl_object_identity bigint  NOT NULL,
     ace_order           integer NOT NULL,
     sid                 bigint  NOT NULL,
     mask                integer NOT NULL,
-    granting            tinyint NOT NULL,
-    audit_success       tinyint NOT NULL,
-    audit_failure       tinyint NOT NULL,
+    granting            SMALLINT NOT NULL,
+    audit_success       SMALLINT NOT NULL,
+    audit_failure       SMALLINT NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT unique_uk_4 UNIQUE (acl_object_identity, ace_order)
 );
 
 CREATE TABLE IF NOT EXISTS acl_object_identity
 (
-    id                 bigint  NOT NULL AUTO_INCREMENT,
+    id                 SERIAL,
     object_id_class    bigint  NOT NULL,
-    object_id_identity bigint  NOT NULL,
+    object_id_identity varchar  NOT NULL,
     parent_object      bigint DEFAULT NULL,
     owner_sid          bigint DEFAULT NULL,
-    entries_inheriting tinyint NOT NULL,
+    entries_inheriting SMALLINT NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT unique_uk_3 UNIQUE (object_id_class, object_id_identity)
 );
