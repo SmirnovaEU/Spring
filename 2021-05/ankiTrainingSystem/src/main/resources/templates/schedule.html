@@ -12,18 +12,24 @@
 </head>
 <body>
 
-<div class="btn-group" role="group">
-    <a th:href="@{/words/schedule(dictId=${dictionary.id}, lang=en_EN)}" class="btn btn-primary" type="radio" href="schedule.html">en</a>
-    <a th:href="@{/words/schedule(dictId=${dictionary.id}, lang=ru_RU)}" class="btn btn-danger" type="radio" href="schedule.html">ru</a>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="btn-group" role="group">
+        <a th:href="@{/words/schedule(dictId=${dictionary.id}, lang=en_EN)}" class="btn btn-info" type="radio"
+           href="schedule.html">en</a>
+        <a th:href="@{/words/schedule(dictId=${dictionary.id}, lang=ru_RU)}" class="btn btn-danger" type="radio"
+           href="schedule.html">ru</a>
+    </div>
+</nav>
+
 <br/><br/>
 <div class="container">
     <h1 th:text="${dictionary.name}">Dictionary:</h1>
-    <a th:href="@{/words/all(dictId=${dictionary.id})}" class="btn btn-primary" href="dict.html" th:text="#{title.dictionary}">To dictionary</a>
+    <a th:href="@{/words/all(dictId=${dictionary.id})}" class="btn btn-info" href="dict.html"
+       th:text="#{title.dictionary}">To dictionary</a>
     <br/><br/>
 
     <table class="table table-bordered table-striped">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th th:text="#{field.word('')}">WORD</th>

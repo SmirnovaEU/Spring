@@ -12,15 +12,16 @@
 </head>
 <body>
 
-<div class="btn-group" role="group">
-    <a th:href="@{/dicts/all(lang=en_EN)}" class="btn btn-primary" type="radio" href="dictList.html">en</a>
-    <a th:href="@{/dicts/all(lang=ru_RU)}" class="btn btn-danger" type="radio" href="dictList.html">ru</a>
-</div>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="btn-group" role="group">
+        <a th:href="@{/dicts/all(lang=en_EN)}" class="btn btn-info" type="radio"
+           href="dictList.html">en</a>
+        <a th:href="@{/dicts/all(lang=ru_RU)}" class="btn btn-danger" type="radio" href="dictList.html">ru</a>
+    </div>
+</nav>
 <br/><br/>
 <div class="container">
     <h1 th:text="#{title.dictionaries}">Dictionaries:</h1>
-<!--    <a th:href="@{/words/addWord(id=${dictionary.id})}" class="btn btn-primary" href="add.html" th:text="#{title.add}">Add word</a>-->
-    <br/><br/>
 
     <table class="table table-bordered table-striped">
         <thead>
@@ -28,7 +29,7 @@
             <th>ID</th>
             <th th:text="#{field.name('')}">WORD</th>
             <th th:text="#{field.createDate('')}">CREATION DATE</th>
-<!--            <th th:text="#{field.owner('')}">OWNER</th>-->
+            <!--            <th th:text="#{field.owner('')}">OWNER</th>-->
             <th th:text="#{field.description('')}">DESCRIPTION</th>
         </tr>
         </thead>
@@ -39,16 +40,16 @@
                 <a th:text="${dict.name}" th:href="@{/words/all(dictId=${dict.id})}" href="dict.html">animals</a>
             </td>
             <td th:text="${dict.creationDate}">01.01.2022</td>
-<!--            <td th:text="${dict.owner}">lenu</td>-->
+            <!--            <td th:text="${dict.owner}">lenu</td>-->
             <td th:text="${dict.description}">Words about animals</td>
 
-<!--            <td>-->
-<!--                <a th:href="@{/words/edit(id=${word.id})}" class="btn btn-info" href="edit.html" th:text="#{command.edit}">Edit</a>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                <a th:href="@{/words/delete(id=${word.id})}" class="btn btn-danger ml-2"-->
-<!--                   th:text="#{command.delete}">Delete</a>-->
-<!--            </td>-->
+            <!--            <td>-->
+            <!--                <a th:href="@{/words/edit(id=${word.id})}" class="btn btn-info" href="edit.html" th:text="#{command.edit}">Edit</a>-->
+            <!--            </td>-->
+            <!--            <td>-->
+            <!--                <a th:href="@{/words/delete(id=${word.id})}" class="btn btn-danger ml-2"-->
+            <!--                   th:text="#{command.delete}">Delete</a>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>
