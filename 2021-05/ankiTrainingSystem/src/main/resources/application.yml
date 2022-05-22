@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/word_train
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    show-sql: true
+
+
+
+info:
+  app:
+    version: @project.version@
+    author: lenu
+    description: This is a multiuser anki training system
