@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DictionaryIndicator implements HealthIndicator {
-    private final int DICTS_THRESHOLD = 2;
+
     private final DictionaryRepository repository;
 
     @Autowired
