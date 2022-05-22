@@ -9,6 +9,7 @@ import com.example.lettermodels.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Log4j2
 public class SenderService {
     private static final String MAIN_EXCHANGE_NAME = "main-exchange";
     private static final String REPEAT_LETTER_KEY = "notification.repeat";
@@ -48,14 +50,17 @@ public class SenderService {
             if (userSettings == null) continue;
             String email = userSettings.getEmail();
             if (email == null) continue;
+            log.info("User email: " + email);
 
             List<Dictionary> dictionaries = dictionaryRepository.findByUser(user);
             if (dictionaries.isEmpty()) continue;
             List<DictionaryForRepeat> repeatList = new ArrayList<>();
+            log.info("Dictionaries: " + dictionaries.toString());
             for (Dictionary dict: dictionaries) {
                 List<Schedule> schedules = scheduleRepository.findWordsForRepeat(dict, WordStatus.NEW, LocalDate.now());
                 if (schedules.isEmpty()) continue;
                 DictionaryForRepeat repeatDict = new DictionaryForRepeat(dict.getName(), schedules.size());
+                log.info("Words for repeat: " + repeatDict.toString());
                 repeatList.add(repeatDict);
             }
             if (repeatList.isEmpty()) continue;

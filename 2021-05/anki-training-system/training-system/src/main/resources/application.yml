@@ -11,7 +11,24 @@ spring:
       use-new-id-generator-mappings: false
     show-sql: true
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,logfile
+  endpoint:
+    health:
+      show-details: always
+  info:
+    # Включает информацию о приложении из application.yml
+    env:
+      enabled: true
+    # Включает информацию о git, собранную плагином
+    git:
+      mode: "full"
+logging:
+  file:
+    name: "./logs/log-file.log"
 
 info:
   app:
