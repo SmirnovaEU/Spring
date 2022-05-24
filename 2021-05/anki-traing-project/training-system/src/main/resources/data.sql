@@ -38,14 +38,13 @@ values (1, 'My Dictionary', '2021-12-09', 'main dictionary', 1),
        (3, 'Other user dictionary', '2021-12-09', 'someone^s else dictionary', 3);
 ;
 
-
-insert into WORDS (NAME, TRANSLATION, CONTEXT, EXAMPLE, ADD_DATE, LEARNT_DATE, LEARNT_PERCENT, STATE, DICTIONARY_ID)
+insert into WORDS (NAME, TRANSLATION, CONTEXT, EXAMPLE, ADD_DATE, DICTIONARY_ID)
 values ('tenacious', 'упорный, упрямый', 'merriam-webster',
         'The tenacious king salmon will likely be coming back for many, many autumns to come.',
-        '2021-12-09', null, 0, 1, 1),
+        '2021-12-09', 1),
        ('treadmill', 'беговая дорожка', 'Dr. House',
         'Put the patient on a treadmill.',
-        '2021-12-09', null, 0, 1, 1);
+        '2021-12-09', 1);
 
 insert into SCHEDULE (WORD_ID, NEXT_TRAIN_DATE, LAST_TRAIN_DATE, TOTAL_NUMBER, STAGE, STATUS, LEARNT_DATE, DICT_ID)
 values (1, '2021-12-09', null, 0, 0, 0, null, 1),

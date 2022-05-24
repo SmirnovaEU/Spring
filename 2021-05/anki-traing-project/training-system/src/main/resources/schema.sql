@@ -53,9 +53,6 @@ CREATE TABLE words
     context        VARCHAR(255),
     example        VARCHAR(2048),
     add_date       DATE,
-    learnt_date    DATE,
-    learnt_percent INTEGER,
-    state          VARCHAR(255),
     dictionary_id  BIGINT REFERENCES dictionaries,
     CONSTRAINT words_pkey PRIMARY KEY (id)
 );

@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/users/*").hasRole("ADMIN")
                 .and()
-                .authorizeRequests().antMatchers("/words/*","/trainings/**").hasRole("USER")
+                .authorizeRequests().antMatchers("/words/*","/trainings/**", "/dicts/*").hasRole("USER")
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/")
